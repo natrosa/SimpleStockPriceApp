@@ -10,7 +10,7 @@ import datetime #for query
 st.markdown('''
 # Simple Stock Price App
 **Credits**
-- App built folliwing [Tutorial](https://www.youtube.com/watch?v=0pHJOzNDdOo) 
+- App built folliwing [Tutorial](https://www.youtube.com/watch?v=0pHJOzNDdOo) by [Data Professor](http://youtube.com/dataprofessor)
 ''')
 st.write('---')
 
