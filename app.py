@@ -18,7 +18,7 @@ start_date = st.sidebar.date_input("Start date", datetime.date(2020, 1, 1))
 end_date = st.sidebar.date_input("End date", datetime.date(2022, 1, 31))
 
 # Retrieving data
-st.title("Enter stock/crypto symbol: ")
+st.title("Enter symbol: ")
 tickerSymbol = st.text_input("Example: AMD, TWTR, AAPL, TSLA, FB, BTC-USD, ETH-USD")
 tickerData = yf.Ticker(tickerSymbol)
 tickerDf = tickerData.history(period='1d', start=start_date, end=end_date) #get the historical prices for this ticker
