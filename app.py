@@ -9,6 +9,8 @@ import datetime #for query
 # App title
 st.markdown('''
 # Simple Stock Price App
+**Credits**
+- App built folliwing [Tutorial](https://www.youtube.com/watch?v=0pHJOzNDdOo) 
 ''')
 st.write('---')
 
