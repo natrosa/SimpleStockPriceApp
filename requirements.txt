@@ -2,3 +2,4 @@ cufflinks
 pandas
 streamlit
 yfinance
+fbprophet
