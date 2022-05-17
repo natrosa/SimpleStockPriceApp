@@ -10,6 +10,7 @@ import datetime #for query
 from datetime import date
 from fbprophet import Prophet
 from fbprophet.plot import plot_plotly
+import plotly
 from plotly import graph_objs as go
 
 # App title
@@ -81,16 +82,52 @@ data_load_state.text('Loading data... done!')
 st.subheader('Raw data')
 st.write(data.tail())
 
-# Plot raw data
-def plot_raw_data():
-	fig = go.Figure()
-	fig.add_trace(go.Scatter(x=data['Date'], y=data['Open'], name="stock_open"))
-	fig.add_trace(go.Scatter(x=data['Date'], y=data['Close'], name="stock_close"))
-	fig.layout.update(title_text='Time Series data with Rangeslider', xaxis_rangeslider_visible=True)
-	st.plotly_chart(fig)
-	
-plot_raw_data()
+# Plot Raw data
+trace_open = go.Scatter(
+    x = data["Date"],
+    y = data["Open"],
+    mode = 'lines',
+    name="Open"
+)
 
+trace_high = go.Scatter(
+    x = data["Date"],
+    y = data["High"],
+    mode = 'lines',
+    name="High"
+)
+
+trace_low = go.Scatter(
+    x = data["Date"],
+    y = data["Low"],
+    mode = 'lines',
+    name="Low"
+)
+
+trace_close = go.Scatter(
+    x = data["Date"],
+    y = data["Close"],
+    mode = 'lines',
+    name="Close"
+)
+
+data_traces = [trace_open,trace_high,trace_low,trace_close]
+layout = go.Layout(title="Stock Price",xaxis_rangeslider_visible=True)
+fig = go.Figure(data=data_traces,layout=layout)
+st.plotly_chart(fig)
+
+
+trace_volume = go.Scatter(
+    x = data["Date"],
+    y = data["Volume"],
+    mode = 'lines',
+    name="Volume"
+)
+
+data_volume = [trace_volume]
+layout_volume = go.Layout(title="Volume",xaxis_rangeslider_visible=True)
+fig_volume = go.Figure(data=data_volume,layout=layout_volume)
+st.plotly_chart(fig_volume)
 
 # Predict forecast with Prophet.
 df_train = data[['Date','Close']]
@@ -101,21 +138,46 @@ m.fit(df_train)
 future = m.make_future_dataframe(periods=period)
 forecast = m.predict(future)
 
-# Show and plot forecast
+df_forecast = forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']]
+
+trace_open = go.Scatter(
+    x = df_forecast["ds"],
+    y = df_forecast["yhat"],
+    mode = 'lines',
+    name="Forecast"
+)
+
+trace_high = go.Scatter(
+    x = df_forecast["ds"],
+    y = df_forecast["yhat_upper"],
+    mode = 'lines',
+    fill = "tonexty", 
+    line = {"color": "#57b8ff"}, 
+    name="Higher uncertainty interval"
+)
+
+trace_low = go.Scatter(
+    x = df_forecast["ds"],
+    y = df_forecast["yhat_lower"],
+    mode = 'lines',
+    fill = "tonexty", 
+    line = {"color": "#57b8ff"}, 
+    name="Lower uncertainty interval"
+)
+
+
+trace_close = go.Scatter(
+    x = df_train["ds"],
+    y = df_train["y"],
+    name="Data values"
+)
+
 st.subheader('Forecast data')
-st.write(forecast.tail())
-    
-st.write(f'Forecast plot for {n_years} years')
-fig1 = plot_plotly(m, forecast)
-st.plotly_chart(fig1)
+data = [trace_open,trace_high,trace_low,trace_close]
+layout = go.Layout(title="Stock Price Forecast",xaxis_rangeslider_visible=True)
 
-st.write("Forecast components")
-fig2 = m.plot_components(forecast)
-st.write(fig2)
-
-
-
-
+fig_forecast = go.Figure(data=data,layout=layout)
+st.plotly_chart(fig_forecast)
 
 ####
 st.write('---')
