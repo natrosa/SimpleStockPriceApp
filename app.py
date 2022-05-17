@@ -111,10 +111,14 @@ trace_close = go.Scatter(
     name="Close"
 )
 
+
+
+st.subheader('Stock Price')
+
 data_traces = [trace_open,trace_high,trace_low,trace_close]
 layout = go.Layout(title="Stock Price",xaxis_rangeslider_visible=True)
 fig = go.Figure(data=data_traces,layout=layout)
-st.plotly_chart(fig)
+st.plotly_chart(fig,use_container_width=True)
 
 
 trace_volume = go.Scatter(
@@ -123,6 +127,8 @@ trace_volume = go.Scatter(
     mode = 'lines',
     name="Volume"
 )
+
+st.subheader('Volume')
 
 data_volume = [trace_volume]
 layout_volume = go.Layout(title="Volume",xaxis_rangeslider_visible=True)
@@ -172,12 +178,12 @@ trace_close = go.Scatter(
     name="Data values"
 )
 
-st.subheader('Forecast data')
+st.subheader('Forecast ')
 data = [trace_open,trace_high,trace_low,trace_close]
 layout = go.Layout(title="Stock Price Forecast",xaxis_rangeslider_visible=True)
 
 fig_forecast = go.Figure(data=data,layout=layout)
-st.plotly_chart(fig_forecast)
+st.plotly_chart(fig_forecast, use_container_width=True, width=800, height=800)
 
 ####
 st.write('---')
